@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
-use Validator; 
+use App\Helper;
+use Validator;
+use Auth;
 
 
 class Usercontroller extends Controller
@@ -51,7 +53,27 @@ class Usercontroller extends Controller
         
     }
 
-    public function list(Request $request){
-        return User::get();   
+    public function login(Request $request){
+
+        $validator = Validator::make($request->all(), [ 
+            'username' => 'required|exists:users',
+            'password' => 'required'
+        ]);
+        
+        if ($validator->fails()) { 
+            return response()->json(['error'=>$validator->errors()], 401);            
+        }
+
+        $credentials = $request->only(['username', 'password']);
+
+        if(Auth::attempt(["username" => $credentials['username'], "password" => $credentials['passsword']])){
+
+            $token = Helper::getToken($credentials);
+
+            return $token;
+
+        }
+        
     }
+
 }

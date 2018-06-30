@@ -17,9 +17,9 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 });
 
-Route::get('/users', 'Usercontroller@list');
-
 Route::post('user/add','Usercontroller@adduser');
+
+Route::post('user/login','Usercontroller@login');
 
 
 

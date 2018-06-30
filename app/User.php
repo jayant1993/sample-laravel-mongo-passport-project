@@ -2,12 +2,15 @@
 
 namespace App;
 
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Auth\Authenticatable as AuthenticableTrait;
 use Moloquent\Eloquent\Model as Eloquent;
 
-class User extends Eloquent
+class User extends Eloquent implements Authenticatable
 {
-    use Notifiable;
+    use HasApiTokens, Notifiable, AuthenticableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -26,4 +29,10 @@ class User extends Eloquent
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+
+    public function findForPassport($username)
+    {
+        return $this->where('username', $username)->first();
+    }
 }

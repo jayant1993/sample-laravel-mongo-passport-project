@@ -11,6 +11,3 @@
 |
 */
 
-Route::get('/users', 'Usercontroller@list');
-
-Route::get('/adduser','Usercontroller@create');
