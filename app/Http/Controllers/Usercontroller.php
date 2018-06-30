@@ -66,16 +66,36 @@ class Usercontroller extends Controller
 
         $credentials = $request->only(['username', 'password']);
 
-        return $credentials;
+        if(Auth::attempt(["username" => $credentials['username'], "password" => $credentials['password']])){
 
-        // if(Auth::attempt(["username" => $credentials['username'], "password" => $credentials['passsword']])){
+            $request->request->add([
+                "grant_type" => "password",
+                "client_id" => env('CLIENT_ID'),
+                "client_secret" => env('CLIENT_SECRET'),
+                "username" => $credentials['username'],
+                "password" => $credentials['password'],
+            ]);
+    
+            $authRequest = $request->create(
+                env('APP_URL').'/oauth/token',
+                'post'
+            );
 
-        //     $token = Helper::getToken($credentials);
+            $token = Helper::getToken($authRequest);
 
-        //     return $token;
+            return response()->json(["message" => $token['message'], "token" => $token['data']], $token['status']);
 
-        // }
+        }
         
     }
+
+    public function refresh(Request $request){
+        
+        $token = Helper::refreshToken($request, $request->refreshtoken);
+
+        return response()->json(["message" => $token['message'], "token" => $token['data']], $token['status']);
+        
+    }
+
 
 }

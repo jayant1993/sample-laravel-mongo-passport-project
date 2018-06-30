@@ -21,6 +21,7 @@ Route::post('user/add','Usercontroller@adduser');
 
 Route::post('user/login','Usercontroller@login');
 
+Route::post('user/refresh','Usercontroller@refresh');
 
 
 
