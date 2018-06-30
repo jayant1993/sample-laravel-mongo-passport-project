@@ -66,13 +66,15 @@ class Usercontroller extends Controller
 
         $credentials = $request->only(['username', 'password']);
 
-        if(Auth::attempt(["username" => $credentials['username'], "password" => $credentials['passsword']])){
+        return $credentials;
 
-            $token = Helper::getToken($credentials);
+        // if(Auth::attempt(["username" => $credentials['username'], "password" => $credentials['passsword']])){
 
-            return $token;
+        //     $token = Helper::getToken($credentials);
 
-        }
+        //     return $token;
+
+        // }
         
     }
 
